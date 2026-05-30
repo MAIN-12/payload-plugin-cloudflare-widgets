@@ -1,7 +1,7 @@
 {
-  "name": "",
-  "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "name": "@main12/payload-plugin-cloudflare-widgets",
+  "version": "0.1.0",
+  "description": "Payload CMS plugin providing Cloudflare analytics dashboard widgets",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -19,6 +19,51 @@
       "import": "./src/exports/rsc.ts",
       "types": "./src/exports/rsc.ts",
       "default": "./src/exports/rsc.ts"
+    },
+    "./widgets/cloudflare-traffic": {
+      "import": "./src/widgets/CloudflareTraffic/Component.client.tsx",
+      "types": "./src/widgets/CloudflareTraffic/Component.client.tsx",
+      "default": "./src/widgets/CloudflareTraffic/Component.client.tsx"
+    },
+    "./widgets/cloudflare-bandwidth": {
+      "import": "./src/widgets/CloudflareBandwidth/Component.client.tsx",
+      "types": "./src/widgets/CloudflareBandwidth/Component.client.tsx",
+      "default": "./src/widgets/CloudflareBandwidth/Component.client.tsx"
+    },
+    "./widgets/cloudflare-cache-rate": {
+      "import": "./src/widgets/CloudflareCacheRate/Component.client.tsx",
+      "types": "./src/widgets/CloudflareCacheRate/Component.client.tsx",
+      "default": "./src/widgets/CloudflareCacheRate/Component.client.tsx"
+    },
+    "./widgets/cloudflare-devices": {
+      "import": "./src/widgets/CloudflareDevices/Component.client.tsx",
+      "types": "./src/widgets/CloudflareDevices/Component.client.tsx",
+      "default": "./src/widgets/CloudflareDevices/Component.client.tsx"
+    },
+    "./widgets/cloudflare-protocol": {
+      "import": "./src/widgets/CloudflareProtocol/Component.client.tsx",
+      "types": "./src/widgets/CloudflareProtocol/Component.client.tsx",
+      "default": "./src/widgets/CloudflareProtocol/Component.client.tsx"
+    },
+    "./widgets/cloudflare-status-codes": {
+      "import": "./src/widgets/CloudflareStatusCodes/Component.client.tsx",
+      "types": "./src/widgets/CloudflareStatusCodes/Component.client.tsx",
+      "default": "./src/widgets/CloudflareStatusCodes/Component.client.tsx"
+    },
+    "./widgets/cloudflare-threats": {
+      "import": "./src/widgets/CloudflareThreats/Component.client.tsx",
+      "types": "./src/widgets/CloudflareThreats/Component.client.tsx",
+      "default": "./src/widgets/CloudflareThreats/Component.client.tsx"
+    },
+    "./widgets/cloudflare-top-paths": {
+      "import": "./src/widgets/CloudflareTopPaths/Component.client.tsx",
+      "types": "./src/widgets/CloudflareTopPaths/Component.client.tsx",
+      "default": "./src/widgets/CloudflareTopPaths/Component.client.tsx"
+    },
+    "./widgets/cloudflare-world-map": {
+      "import": "./src/widgets/CloudflareWorldMap/Component.client.tsx",
+      "types": "./src/widgets/CloudflareWorldMap/Component.client.tsx",
+      "default": "./src/widgets/CloudflareWorldMap/Component.client.tsx"
     }
   },
   "main": "./src/index.ts",
@@ -34,6 +79,7 @@
     "copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
     "dev": "next dev dev --turbo",
     "dev:generate-importmap": "pnpm dev:payload generate:importmap",
+    "update-preview-image": "node scripts/update-preview-image.js",
     "dev:generate-types": "pnpm dev:payload generate:types",
     "dev:payload": "cross-env PAYLOAD_CONFIG_PATH=./dev/payload.config.ts payload",
     "generate:importmap": "pnpm dev:generate-importmap",
@@ -59,6 +105,7 @@
     "@types/node": "22.19.9",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "@types/react-simple-maps": "^3.0.6",
     "copyfiles": "2.4.1",
     "cross-env": "^7.0.3",
     "eslint": "^9.23.0",
@@ -87,6 +134,7 @@
     "pnpm": "^9 || ^10"
   },
   "publishConfig": {
+    "access": "public",
     "exports": {
       ".": {
         "import": "./dist/index.js",
@@ -102,6 +150,51 @@
         "import": "./dist/exports/rsc.js",
         "types": "./dist/exports/rsc.d.ts",
         "default": "./dist/exports/rsc.js"
+      },
+      "./widgets/cloudflare-traffic": {
+        "import": "./dist/widgets/CloudflareTraffic/Component.client.js",
+        "types": "./dist/widgets/CloudflareTraffic/Component.client.d.ts",
+        "default": "./dist/widgets/CloudflareTraffic/Component.client.js"
+      },
+      "./widgets/cloudflare-bandwidth": {
+        "import": "./dist/widgets/CloudflareBandwidth/Component.client.js",
+        "types": "./dist/widgets/CloudflareBandwidth/Component.client.d.ts",
+        "default": "./dist/widgets/CloudflareBandwidth/Component.client.js"
+      },
+      "./widgets/cloudflare-cache-rate": {
+        "import": "./dist/widgets/CloudflareCacheRate/Component.client.js",
+        "types": "./dist/widgets/CloudflareCacheRate/Component.client.d.ts",
+        "default": "./dist/widgets/CloudflareCacheRate/Component.client.js"
+      },
+      "./widgets/cloudflare-devices": {
+        "import": "./dist/widgets/CloudflareDevices/Component.client.js",
+        "types": "./dist/widgets/CloudflareDevices/Component.client.d.ts",
+        "default": "./dist/widgets/CloudflareDevices/Component.client.js"
+      },
+      "./widgets/cloudflare-protocol": {
+        "import": "./dist/widgets/CloudflareProtocol/Component.client.js",
+        "types": "./dist/widgets/CloudflareProtocol/Component.client.d.ts",
+        "default": "./dist/widgets/CloudflareProtocol/Component.client.js"
+      },
+      "./widgets/cloudflare-status-codes": {
+        "import": "./dist/widgets/CloudflareStatusCodes/Component.client.js",
+        "types": "./dist/widgets/CloudflareStatusCodes/Component.client.d.ts",
+        "default": "./dist/widgets/CloudflareStatusCodes/Component.client.js"
+      },
+      "./widgets/cloudflare-threats": {
+        "import": "./dist/widgets/CloudflareThreats/Component.client.js",
+        "types": "./dist/widgets/CloudflareThreats/Component.client.d.ts",
+        "default": "./dist/widgets/CloudflareThreats/Component.client.js"
+      },
+      "./widgets/cloudflare-top-paths": {
+        "import": "./dist/widgets/CloudflareTopPaths/Component.client.js",
+        "types": "./dist/widgets/CloudflareTopPaths/Component.client.d.ts",
+        "default": "./dist/widgets/CloudflareTopPaths/Component.client.js"
+      },
+      "./widgets/cloudflare-world-map": {
+        "import": "./dist/widgets/CloudflareWorldMap/Component.client.js",
+        "types": "./dist/widgets/CloudflareWorldMap/Component.client.d.ts",
+        "default": "./dist/widgets/CloudflareWorldMap/Component.client.js"
       }
     },
     "main": "./dist/index.js",
@@ -115,5 +208,8 @@
     ]
   },
   "registry": "https://registry.npmjs.org/",
-  "dependencies": {}
+  "dependencies": {
+    "react-simple-maps": "^3.0.0",
+    "recharts": "^3.8.1"
+  }
 }

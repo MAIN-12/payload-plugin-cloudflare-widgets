@@ -1,9 +1,8 @@
-import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { MongoMemoryReplSet } from 'mongodb-memory-server'
 import path from 'path'
 import { buildConfig } from 'payload'
-import {  } from ''
+import { cloudflareWidgetsPlugin } from '../src/index.js'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
@@ -18,17 +17,6 @@ if (!process.env.ROOT_DIR) {
 }
 
 const buildConfigWithMemoryDB = async () => {
-  if (process.env.NODE_ENV === 'test') {
-    const memoryDB = await MongoMemoryReplSet.create({
-      replSet: {
-        count: 3,
-        dbName: 'payloadmemory',
-      },
-    })
-
-    process.env.DATABASE_URL = `${memoryDB.getUri()}&retryWrites=true`
-  }
-
   return buildConfig({
     admin: {
       importMap: {
@@ -48,22 +36,17 @@ const buildConfigWithMemoryDB = async () => {
         },
       },
     ],
-    db: mongooseAdapter({
-      ensureIndexes: true,
-      url: process.env.DATABASE_URL || '',
+    db: sqliteAdapter({
+      client: {
+        url: `file:${path.resolve(dirname, 'dev.db')}`,
+      },
     }),
     editor: lexicalEditor(),
     email: testEmailAdapter,
     onInit: async (payload) => {
       await seed(payload)
     },
-    plugins: [
-      ({
-        collections: {
-          posts: true,
-        },
-      }),
-    ],
+    plugins: [cloudflareWidgetsPlugin({})],
     secret: process.env.PAYLOAD_SECRET || 'test-secret_key',
     sharp,
     typescript: {

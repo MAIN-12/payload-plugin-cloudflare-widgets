@@ -1,113 +1,64 @@
-import type { CollectionSlug, Config } from 'payload'
+import type { Config } from 'payload'
 
-import { customEndpointHandler } from './endpoints/customEndpointHandler.js'
+import { cloudflareAnalyticsHandler } from './endpoints/cloudflareAnalyticsEndpoint.js'
+import { cloudflareWidgets } from './widgets/index.js'
 
-export type Config = {
+export type CloudflareWidgetsPluginOptions = {
   /**
-   * List of collections to add a custom field
+   * Path prefix for the analytics API endpoint.
+   * Defaults to '/analytics/cloudflare' (accessible at /api/analytics/cloudflare).
    */
-  collections?: Partial<Record<CollectionSlug, true>>
+  apiPath?: string
+  /**
+   * Set to true to disable the plugin without removing it from config.
+   */
   disabled?: boolean
 }
 
-export const  =
-  (pluginOptions: Config) =>
+export const cloudflareWidgetsPlugin =
+  (pluginOptions: CloudflareWidgetsPluginOptions = {}) =>
   (config: Config): Config => {
-    if (!config.collections) {
-      config.collections = []
-    }
-
-    config.collections.push({
-      slug: 'plugin-collection',
-      fields: [
-        {
-          name: 'id',
-          type: 'text',
-        },
-      ],
-    })
-
-    if (pluginOptions.collections) {
-      for (const collectionSlug in pluginOptions.collections) {
-        const collection = config.collections.find(
-          (collection) => collection.slug === collectionSlug,
-        )
-
-        if (collection) {
-          collection.fields.push({
-            name: 'addedByPlugin',
-            type: 'text',
-            admin: {
-              position: 'sidebar',
-            },
-          })
-        }
-      }
-    }
-
-    /**
-     * If the plugin is disabled, we still want to keep added collections/fields so the database schema is consistent which is important for migrations.
-     * If your plugin heavily modifies the database schema, you may want to remove this property.
-     */
     if (pluginOptions.disabled) {
       return config
     }
 
+    const apiPath = pluginOptions.apiPath ?? '/analytics/cloudflare'
+
+    // Register the Cloudflare analytics endpoint
     if (!config.endpoints) {
       config.endpoints = []
     }
+    config.endpoints.push({
+      handler: cloudflareAnalyticsHandler,
+      method: 'get',
+      path: apiPath,
+    })
 
+    // Register all Cloudflare widgets on the admin dashboard
     if (!config.admin) {
       config.admin = {}
     }
-
-    if (!config.admin.components) {
-      config.admin.components = {}
+    if (!config.admin.dashboard) {
+      config.admin.dashboard = { widgets: [] }
+    }
+    if (!config.admin.dashboard.widgets) {
+      config.admin.dashboard.widgets = []
     }
 
-    if (!config.admin.components.beforeDashboard) {
-      config.admin.components.beforeDashboard = []
-    }
-
-    config.admin.components.beforeDashboard.push(
-      `/client#BeforeDashboardClient`,
-    )
-    config.admin.components.beforeDashboard.push(
-      `/rsc#BeforeDashboardServer`,
-    )
-
-    config.endpoints.push({
-      handler: customEndpointHandler,
-      method: 'get',
-      path: '/my-plugin-endpoint',
-    })
-
-    const incomingOnInit = config.onInit
-
-    config.onInit = async (payload) => {
-      // Ensure we are executing any existing onInit functions before running our own.
-      if (incomingOnInit) {
-        await incomingOnInit(payload)
-      }
-
-      const { totalDocs } = await payload.count({
-        collection: 'plugin-collection',
-        where: {
-          id: {
-            equals: 'seeded-by-plugin',
-          },
-        },
-      })
-
-      if (totalDocs === 0) {
-        await payload.create({
-          collection: 'plugin-collection',
-          data: {
-            id: 'seeded-by-plugin',
-          },
-        })
-      }
-    }
+    config.admin.dashboard.widgets.push(...cloudflareWidgets)
 
     return config
   }
+
+// Re-export widget configs for consumers who want to cherry-pick
+export {
+  cloudflareWidgets,
+  CloudflareTrafficWidget,
+  CloudflareBandwidthWidget,
+  CloudflareCacheRateWidget,
+  CloudflareDevicesWidget,
+  CloudflareProtocolWidget,
+  CloudflareStatusCodesWidget,
+  CloudflareThreatsWidget,
+  CloudflareTopPathsWidget,
+} from './widgets/index.js'
