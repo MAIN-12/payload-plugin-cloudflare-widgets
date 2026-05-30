@@ -1,4 +1,4 @@
-﻿# @main12/payload-plugin-cloudflare-widgets
+﻿# @main12/payload-cloudflare-widgets
 
 A [Payload CMS](https://payloadcms.com) plugin that adds Cloudflare analytics widgets to your admin dashboard. Visualize traffic, bandwidth, cache performance, threats, and more — all powered by the Cloudflare GraphQL API.
 
@@ -26,9 +26,9 @@ A [Payload CMS](https://payloadcms.com) plugin that adds Cloudflare analytics wi
 ## Installation
 
 ```bash
-pnpm add @main12/payload-plugin-cloudflare-widgets
+pnpm add @main12/payload-cloudflare-widgets
 # or
-npm install @main12/payload-plugin-cloudflare-widgets
+npm install @main12/payload-cloudflare-widgets
 ```
 
 ## Environment Variables
@@ -48,7 +48,7 @@ Add the plugin to your `payload.config.ts`:
 
 ```ts
 import { buildConfig } from 'payload'
-import { cloudflareWidgetsPlugin } from '@main12/payload-plugin-cloudflare-widgets'
+import { cloudflareWidgetsPlugin } from '@main12/payload-cloudflare-widgets'
 
 export default buildConfig({
   plugins: [
@@ -83,7 +83,7 @@ import {
   CloudflareTrafficWidget,
   CloudflareBandwidthWidget,
   CloudflareWorldMapWidget,
-} from '@main12/payload-plugin-cloudflare-widgets'
+} from '@main12/payload-cloudflare-widgets'
 
 export default buildConfig({
   admin: {

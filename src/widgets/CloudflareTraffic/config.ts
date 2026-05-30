@@ -4,7 +4,7 @@ import { CLOUDFLARE_WIDGET_PREVIEW } from '../previewImage.js'
 export const CloudflareTrafficWidget = {
   slug: 'cloudflare-traffic',
   label: 'Cloudflare Traffic',
-  Component: '@main12/payload-plugin-cloudflare-widgets/widgets/cloudflare-traffic',
+  Component: '@main12/payload-cloudflare-widgets/widgets/cloudflare-traffic',
   imageURL: CLOUDFLARE_WIDGET_PREVIEW,
   minWidth: 'small',
   maxWidth: 'full',

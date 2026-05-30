@@ -1,5 +1,5 @@
 {
-  "name": "@main12/payload-plugin-cloudflare-widgets",
+  "name": "@main12/payload-cloudflare-widgets",
   "version": "0.1.0",
   "description": "Payload CMS plugin providing Cloudflare analytics dashboard widgets",
   "license": "MIT",
