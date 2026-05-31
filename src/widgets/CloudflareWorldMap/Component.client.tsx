@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import { widgetCard, widgetTitle, widgetSubtext, loadingState, errorState } from '../shared.js'
-import { countryFlag, COUNTRY_NAMES } from './mapData.js'
+import { COUNTRY_NAMES } from './mapData.js'
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 
@@ -11,7 +11,6 @@ type CountryData = {
   code: string
   name: string
   views: number
-  visitors: number
 }
 
 // ISO 3166-1 numeric → alpha-2  (world-atlas topojson uses numeric feature IDs)
@@ -407,9 +406,11 @@ const WorldTrafficMap: React.FC = () => {
           >
             <div style={tooltipBoxStyle}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <span style={{ fontSize: 22, lineHeight: 1 }}>
-                  {countryFlag(tooltip.country.code)}
-                </span>
+                <img
+                  src={`https://flagcdn.com/24x18/${tooltip.country.code.toLowerCase()}.png`}
+                  alt={tooltip.country.code}
+                  style={{ width: 24, height: 18, borderRadius: 2, objectFit: 'cover' }}
+                />
                 <div>
                   <div
                     style={{
@@ -486,8 +487,20 @@ const WorldTrafficMap: React.FC = () => {
               >
                 <td style={tdStyle}>{i + 1}</td>
                 <td style={{ ...tdStyle, textAlign: 'left', fontWeight: 500 }}>
-                  <span style={{ marginRight: 6 }}>{countryFlag(country.code)}</span>
-                  {COUNTRY_NAMES[country.code] || country.name}
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <img
+                      src={`https://flagcdn.com/16x12/${country.code.toLowerCase()}.png`}
+                      alt={country.code}
+                      style={{
+                        width: 16,
+                        height: 12,
+                        borderRadius: 1,
+                        objectFit: 'cover',
+                        flexShrink: 0,
+                      }}
+                    />
+                    {COUNTRY_NAMES[country.code] || country.name}
+                  </span>
                 </td>
                 <td style={tdStyle}>{country.views.toLocaleString()}</td>
                 <td style={tdStyle}>

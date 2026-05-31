@@ -167,8 +167,6 @@ export const cloudflareAnalyticsHandler: PayloadHandler = async (req) => {
       }
 
       case 'countries': {
-        // Use httpRequests1dGroups + countryMap — always populated for any active zone.
-        // Adaptive groups require high-volume traffic to return country data.
         const query = `query {
                     viewer {
                         zones(filter: { zoneTag: "${zoneId}" }) {
@@ -201,7 +199,6 @@ export const cloudflareAnalyticsHandler: PayloadHandler = async (req) => {
           sum: { countryMap: Array<{ clientCountryName: string; requests: number }> }
         }> = zones[0]?.httpRequests1dGroups || []
 
-        // Aggregate per-country totals across all days
         const totals: Record<string, number> = {}
         for (const group of groups) {
           for (const entry of group.sum?.countryMap || []) {
@@ -213,7 +210,7 @@ export const cloudflareAnalyticsHandler: PayloadHandler = async (req) => {
         }
 
         const result = Object.entries(totals)
-          .map(([code, requests]) => ({ code, name: code, views: requests, visitors: 0 }))
+          .map(([code, requests]) => ({ code, name: code, views: requests }))
           .sort((a, b) => b.views - a.views)
 
         return Response.json({ data: result, days })

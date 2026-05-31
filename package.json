@@ -1,6 +1,6 @@
 {
   "name": "@main12/payload-cloudflare-widgets",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Payload CMS plugin providing Cloudflare analytics dashboard widgets",
   "license": "MIT",
   "type": "module",
@@ -88,7 +88,8 @@
     "lint:fix": "eslint ./src --fix",
     "test": "pnpm test:int && pnpm test:e2e",
     "test:e2e": "playwright test",
-    "test:int": "vitest"
+    "test:int": "vitest",
+    "generate": "npm run generate:importmap && npm run generate:types"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
